@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 Staf v1 - Главная</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Фоновые частицы -->
+    <div id="particles-js"></div>
+
+    <!-- Навигация -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="ri-brain-line"></i>
+                <span>Staf v1</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="search.html">Поиск</a></li>
+                <li><a href="categories.html">Категории</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="stats.html">Статистика</a></li>
+            </ul>
+            <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Главный заголовок -->
+    <header>
+        <h1 class="glitch" data-text="Staf v1">
+            <i class="ri-brain-line"></i> Staf v1
+        </h1>
+        <p style="font-size: 1.3em; margin-top: 15px;">Поиск брейнротов с невероятной скоростью ⚡</p>
+    </header>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <!-- Приветственная секция -->
+        <section class="card fade-in" style="text-align: center;">
+            <i class="ri-rocket-2-line"></i>
+            <h2>Добро пожаловать в Staf v1!</h2>
+            <p style="font-size: 1.2em; margin: 20px 0;">Самый быстрый и эффективный поисковик брейнротов. Найди то, что нужно, за секунды!</p>
+            <a href="search.html" class="btn" style="margin-top: 20px;">
+                <i class="ri-search-2-line"></i> Начать поиск
+            </a>
+        </section>
+
+        <!-- Преимущества -->
+        <div class="cards-grid">
+            <div class="card slide-in-left">
+                <i class="ri-flashlight-line"></i>
+                <h3>Молниеносная скорость</h3>
+                <p>Получите результаты моментально благодаря нашей оптимизированной системе поиска.</p>
+            </div>
+
+            <div class="card fade-in">
+                <i class="ri-shield-check-line"></i>
+                <h3>Безопасность</h3>
+                <p>Защищенный доступ и надежное хранение вашей истории поиска.</p>
+            </div>
+
+            <div class="card slide-in-right">
+                <i class="ri-star-line"></i>
+                <h3>Качество</h3>
+                <p>Только проверенные и актуальные брейнроты для вашего удовольствия.</p>
+            </div>
+        </div>
+
+        <!-- Быстрый поиск -->
+        <section class="card fade-in" style="text-align: center;">
+            <i class="ri-search-eye-line"></i>
+            <h2>Быстрый поиск</h2>
+            <p style="margin: 20px 0;">Введите запрос и начните поиск прямо сейчас!</p>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 30px;">
+                <input type="search" id="quick-search" placeholder="Введите запрос..." style="max-width: 400px;">
+                <button onclick="quickSearch()" class="btn">
+                    <i class="ri-search-2-line"></i> Поиск
+                </button>
+            </div>
+        </section>
+
+        <!-- Популярные категории -->
+        <section class="card fade-in">
+            <h2 style="text-align: center; margin-bottom: 30px;">
+                <i class="ri-folder-line"></i> Популярные категории
+            </h2>
+            <div class="cards-grid">
+                <div class="card" style="cursor: pointer;" onclick="location.href='categories.html#gaming'">
+                    <i class="ri-gamepad-line"></i>
+                    <h3>Игровые</h3>
+                    <p>Брейнроты связанные с играми и геймингом</p>
+                </div>
+                <div class="card" style="cursor: pointer;" onclick="location.href='categories.html#memes'">
+                    <i class="ri-emotion-laugh-line"></i>
+                    <h3>Мемы</h3>
+                    <p>Смешные и актуальные мемы</p>
+                </div>
+                <div class="card" style="cursor: pointer;" onclick="location.href='categories.html#trends'">
+                    <i class="ri-fire-line"></i>
+                    <h3>Тренды</h3>
+                    <p>Самые горячие тренды момента</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Футер -->
+    <footer>
+        <p>&copy; 2025 Staf v1 | Сделано с 💚</p>
+        <p style="margin-top: 10px; font-size: 0.9em;">Поисковик брейнротов нового поколения</p>
+    </footer>
+
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        function quickSearch() {
+            const query = document.getElementById('quick-search').value;
+            if (query.trim()) {
+                saveSearchQuery(query);
+                window.location.href = 'search.html';
+            } else {
+                alert('⚠️ Введите запрос для поиска!');
+            }
+        }
+        
+        // Enter для быстрого поиска
+        document.getElementById('quick-search')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                quickSearch();
+            }
+        });
+    </script>
+</body>
+</html>
