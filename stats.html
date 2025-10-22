@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Статистика - Staf v1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Фоновые частицы -->
+    <div id="particles-js"></div>
+
+    <!-- Навигация -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="ri-brain-line"></i>
+                <span>Staf v1</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="search.html">Поиск</a></li>
+                <li><a href="categories.html">Категории</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="stats.html">Статистика</a></li>
+            </ul>
+            <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Заголовок -->
+    <header>
+        <h1>
+            <i class="ri-bar-chart-line"></i> Статистика
+        </h1>
+        <p style="font-size: 1.2em; margin-top: 15px;">Ваша активность на платформе</p>
+    </header>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <!-- Основная статистика -->
+        <div class="stats-container">
+            <div class="stat-item fade-in">
+                <i class="ri-eye-line" style="font-size: 50px; color: var(--secondary-green); margin-bottom: 15px;"></i>
+                <div class="stat-number" id="visit-counter">0</div>
+                <div class="stat-label">Посещений</div>
+            </div>
+
+            <div class="stat-item fade-in">
+                <i class="ri-search-line" style="font-size: 50px; color: var(--secondary-green); margin-bottom: 15px;"></i>
+                <div class="stat-number" id="search-counter">0</div>
+                <div class="stat-label">Запросов</div>
+            </div>
+
+            <div class="stat-item fade-in">
+                <i class="ri-folder-line" style="font-size: 50px; color: var(--secondary-green); margin-bottom: 15px;"></i>
+                <div class="stat-number">6</div>
+                <div class="stat-label">Категорий</div>
+            </div>
+        </div>
+
+        <!-- Детальная информация -->
+        <div class="cards-grid">
+            <div class="card fade-in">
+                <i class="ri-time-line" style="font-size: 50px;"></i>
+                <h3>Последняя активность</h3>
+                <p id="last-activity" style="font-size: 1.3em; margin-top: 15px; color: var(--secondary-green);">-</p>
+            </div>
+
+            <div class="card fade-in">
+                <i class="ri-trophy-line" style="font-size: 50px;"></i>
+                <h3>Статус</h3>
+                <p id="user-status" style="font-size: 1.3em; margin-top: 15px; color: var(--secondary-green);">-</p>
+            </div>
+
+            <div class="card fade-in">
+                <i class="ri-calendar-line" style="font-size: 50px;"></i>
+                <h3>Первое посещение</h3>
+                <p id="first-visit" style="font-size: 1.3em; margin-top: 15px; color: var(--secondary-green);">-</p>
+            </div>
+        </div>
+
+        <!-- История поиска -->
+        <section class="card fade-in">
+            <h2 style="margin-bottom: 25px;">
+                <i class="ri-history-line"></i> Последние запросы
+            </h2>
+            <div id="recent-searches" style="display: flex; flex-direction: column; gap: 15px;">
+                <!-- Запросы будут добавлены здесь -->
+            </div>
+        </section>
+
+        <!-- Достижения -->
+        <section class="card fade-in">
+            <h2 style="text-align: center; margin-bottom: 30px;">
+                <i class="ri-medal-line"></i> Достижения
+            </h2>
+            <div class="cards-grid" id="achievements">
+                <!-- Достижения будут добавлены здесь -->
+            </div>
+        </section>
+
+        <!-- Сброс статистики -->
+        <section class="card fade-in" style="text-align: center;">
+            <i class="ri-delete-bin-line" style="font-size: 50px; color: #ff6b6b;"></i>
+            <h3>Сбросить статистику</h3>
+            <p style="margin: 20px 0;">Удалить все данные и начать заново?</p>
+            <button onclick="resetStats()" style="background: linear-gradient(90deg, #ff6b6b, #ff8e8e); box-shadow: 0 0 20px #ff6b6b;">
+                <i class="ri-restart-line"></i> Сбросить данные
+            </button>
+        </section>
+    </div>
+
+    <!-- Футер -->
+    <footer>
+        <p>&copy; 2025 Staf v1 | Сделано с 💚</p>
+    </footer>
+
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        function loadStats() {
+            const stats = getStats();
+            const history = getSearchHistory();
+            
+            // Обновление основной статистики
+            document.getElementById('visit-counter').textContent = stats.visits;
+            document.getElementById('search-counter').textContent = stats.searches;
+            
+            // Последняя активность
+            document.getElementById('last-activity').textContent = new Date().toLocaleString('ru-RU');
+            
+            // Статус
+            let status = 'Новичок';
+            if (stats.visits > 50) status = 'Эксперт';
+            else if (stats.visits > 20) status = 'Профессионал';
+            else if (stats.visits > 10) status = 'Опытный';
+            document.getElementById('user-status').textContent = status;
+            
+            // Первое посещение
+            const firstVisit = localStorage.getItem('staf_first_visit');
+            if (!firstVisit) {
+                localStorage.setItem('staf_first_visit', new Date().toISOString());
+                document.getElementById('first-visit').textContent = 'Сегодня';
+            } else {
+                document.getElementById('first-visit').textContent = new Date(firstVisit).toLocaleDateString('ru-RU');
+            }
+            
+            // Последние запросы
+            const recentSearches = document.getElementById('recent-searches');
+            if (history.length === 0) {
+                recentSearches.innerHTML = '<p style="text-align: center; color: var(--light-green); opacity: 0.7;">Запросов пока нет</p>';
+            } else {
+                recentSearches.innerHTML = history.slice(0, 5).map((query, index) => `
+                    <div style="padding: 15px; background: rgba(0, 255, 136, 0.05); border: 1px solid var(--primary-green); border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <span><i class="ri-search-line" style="margin-right: 10px;"></i>#${index + 1}: ${query}</span>
+                    </div>
+                `).join('');
+            }
+            
+            // Достижения
+            const achievements = [];
+            if (stats.visits >= 1) achievements.push({ icon: 'ri-user-add-line', title: 'Первый визит', desc: 'Посетили сайт' });
+            if (stats.visits >= 10) achievements.push({ icon: 'ri-user-star-line', title: 'Активный', desc: '10+ посещений' });
+            if (stats.searches >= 1) achievements.push({ icon: 'ri-search-line', title: 'Первый поиск', desc: 'Выполнили поиск' });
+            if (stats.searches >= 10) achievements.push({ icon: 'ri-search-2-line', title: 'Исследователь', desc: '10+ поисков' });
+            if (stats.visits >= 50) achievements.push({ icon: 'ri-trophy-line', title: 'Легенда', desc: '50+ посещений' });
+            
+            const achievementsEl = document.getElementById('achievements');
+            if (achievements.length === 0) {
+                achievementsEl.innerHTML = '<p style="text-align: center; color: var(--light-green); opacity: 0.7; grid-column: 1/-1;">Достижения появятся по мере использования</p>';
+            } else {
+                achievementsEl.innerHTML = achievements.map(ach => `
+                    <div class="card" style="text-align: center;">
+                        <i class="${ach.icon}" style="font-size: 50px; color: gold;"></i>
+                        <h3 style="margin: 15px 0 10px;">${ach.title}</h3>
+                        <p>${ach.desc}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function resetStats() {
+            if (confirm('Вы уверены, что хотите сбросить всю статистику? Это действие нельзя отменить!')) {
+                localStorage.removeItem('staf_visits');
+                localStorage.removeItem('staf_search_history');
+                localStorage.removeItem('staf_first_visit');
+                alert('✅ Статистика успешно сброшена!');
+                location.reload();
+            }
+        }
+
+        // Загрузка статистики при загрузке страницы
+        window.addEventListener('DOMContentLoaded', loadStats);
+    </script>
+</body>
+</html>
