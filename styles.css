@@ -562,3 +562,300 @@ footer p {
         padding: 20px 10px;
     }
 }
+
+/* === НОВЫЕ СТИЛИ ДЛЯ РАСШИРЕННЫХ ФУНКЦИЙ === */
+
+/* Темы */
+.theme-card {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-preview {
+    height: 100px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    transition: all 0.3s;
+}
+
+.theme-card:hover .theme-preview {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
+}
+
+.theme-card.active-theme {
+    border-color: var(--secondary-green);
+    box-shadow: 0 0 40px var(--secondary-green);
+}
+
+.theme-card.active-theme::after {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--secondary-green);
+    color: var(--bg-black);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Настройки */
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+.setting-item select {
+    padding: 10px 15px;
+    background: var(--bg-black);
+    color: var(--primary-green);
+    border: 1px solid var(--primary-green);
+    border-radius: 5px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.setting-item select:hover {
+    border-color: var(--secondary-green);
+    box-shadow: 0 0 15px var(--secondary-green);
+}
+
+/* Switch Toggle */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #333;
+    transition: 0.4s;
+    border-radius: 30px;
+    border: 2px solid var(--primary-green);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--primary-green);
+    transition: 0.4s;
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--primary-green);
+}
+
+input:checked + .slider {
+    background-color: var(--primary-green);
+}
+
+input:checked + .slider:before {
+    transform: translateX(28px);
+    background-color: var(--bg-black);
+}
+
+.slider:hover {
+    box-shadow: 0 0 20px var(--secondary-green);
+}
+
+/* Icon кнопки */
+.icon-btn {
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid var(--primary-green);
+    color: var(--primary-green);
+    padding: 10px;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: all 0.3s;
+    box-shadow: 0 0 10px var(--primary-green);
+}
+
+.icon-btn:hover {
+    background: var(--primary-green);
+    color: var(--bg-black);
+    transform: scale(1.1);
+    box-shadow: 0 0 25px var(--secondary-green);
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid var(--primary-green);
+    border-radius: 25px;
+    padding: 40px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 0 50px var(--primary-green);
+    animation: slideIn 0.5s ease;
+    position: relative;
+}
+
+.modal-content h2 {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.modal-content textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid var(--primary-green);
+    border-radius: 10px;
+    background: var(--bg-black);
+    color: var(--primary-green);
+    font-size: 1.1em;
+    font-family: 'Orbitron', sans-serif;
+    resize: vertical;
+    outline: none;
+    box-shadow: 0 0 15px var(--primary-green) inset;
+}
+
+.modal-content textarea:focus {
+    border-color: var(--secondary-green);
+    box-shadow: 0 0 25px var(--secondary-green) inset;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    color: var(--primary-green);
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.close:hover {
+    color: var(--secondary-green);
+    transform: scale(1.2);
+    text-shadow: 0 0 20px var(--secondary-green);
+}
+
+/* Quest Item */
+.quest-item {
+    transition: all 0.3s;
+}
+
+.quest-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 0 25px var(--secondary-green);
+}
+
+.quest-item.completed {
+    opacity: 0.7;
+    border-color: var(--secondary-green);
+}
+
+/* Уведомления */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Favorite Item Animation */
+.favorite-item {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Level Badge в навигации */
+.level-badge {
+    background: linear-gradient(135deg, gold, #ffed4e);
+    color: #000;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9em;
+    box-shadow: 0 0 15px gold;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Рекомендации */
+.recommendation-card {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 40px var(--secondary-green);
+}
+
+/* Адаптивность для новых элементов */
+@media (max-width: 768px) {
+    .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .modal-content {
+        padding: 25px;
+    }
+    
+    .icon-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1em;
+    }
+}
