@@ -23,8 +23,10 @@
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="search.html">Поиск</a></li>
                 <li><a href="categories.html">Категории</a></li>
-                <li><a href="about.html">О нас</a></li>
+                <li><a href="favorites.html">Избранное</a></li>
                 <li><a href="stats.html">Статистика</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="settings.html">Настройки</a></li>
             </ul>
             <div class="burger">
                 <span></span>
@@ -124,11 +126,15 @@
 
     <!-- Скрипты -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="settings.js"></script>
+    <script src="favorites.js"></script>
     <script src="script.js"></script>
     <script>
         function loadStats() {
             const stats = getStats();
             const history = getSearchHistory();
+            const levelData = getUserLevel();
+            const favorites = getFavorites();
             
             // Обновление основной статистики
             document.getElementById('visit-counter').textContent = stats.visits;
@@ -137,11 +143,13 @@
             // Последняя активность
             document.getElementById('last-activity').textContent = new Date().toLocaleString('ru-RU');
             
-            // Статус
+            // Статус на основе уровня
             let status = 'Новичок';
-            if (stats.visits > 50) status = 'Эксперт';
-            else if (stats.visits > 20) status = 'Профессионал';
-            else if (stats.visits > 10) status = 'Опытный';
+            if (levelData.level >= 50) status = 'Бог Брейнротов 👑';
+            else if (levelData.level >= 30) status = 'Легенда ⭐';
+            else if (levelData.level >= 20) status = 'Эксперт 💎';
+            else if (levelData.level >= 10) status = 'Профессионал 🔥';
+            else if (levelData.level >= 5) status = 'Опытный 💪';
             document.getElementById('user-status').textContent = status;
             
             // Первое посещение
@@ -165,22 +173,49 @@
                 `).join('');
             }
             
-            // Достижения
+            // Расширенные достижения
             const achievements = [];
-            if (stats.visits >= 1) achievements.push({ icon: 'ri-user-add-line', title: 'Первый визит', desc: 'Посетили сайт' });
-            if (stats.visits >= 10) achievements.push({ icon: 'ri-user-star-line', title: 'Активный', desc: '10+ посещений' });
-            if (stats.searches >= 1) achievements.push({ icon: 'ri-search-line', title: 'Первый поиск', desc: 'Выполнили поиск' });
-            if (stats.searches >= 10) achievements.push({ icon: 'ri-search-2-line', title: 'Исследователь', desc: '10+ поисков' });
-            if (stats.visits >= 50) achievements.push({ icon: 'ri-trophy-line', title: 'Легенда', desc: '50+ посещений' });
+            
+            // Посещения
+            if (stats.visits >= 1) achievements.push({ icon: 'ri-user-add-line', title: '🎯 Первый шаг', desc: 'Посетили сайт', color: 'var(--primary-green)' });
+            if (stats.visits >= 5) achievements.push({ icon: 'ri-footprint-line', title: '👣 Постоянный гость', desc: '5+ посещений', color: 'var(--primary-green)' });
+            if (stats.visits >= 10) achievements.push({ icon: 'ri-user-star-line', title: '⭐ Активный', desc: '10+ посещений', color: '#ffd700' });
+            if (stats.visits >= 25) achievements.push({ icon: 'ri-vip-line', title: '💎 VIP', desc: '25+ посещений', color: '#00aaff' });
+            if (stats.visits >= 50) achievements.push({ icon: 'ri-trophy-line', title: '🏆 Легенда', desc: '50+ посещений', color: 'gold' });
+            if (stats.visits >= 100) achievements.push({ icon: 'ri-vip-crown-line', title: '👑 Король', desc: '100+ посещений', color: '#ff00ff' });
+            
+            // Поиск
+            if (stats.searches >= 1) achievements.push({ icon: 'ri-search-line', title: '🔍 Первый поиск', desc: 'Выполнили поиск', color: 'var(--primary-green)' });
+            if (stats.searches >= 10) achievements.push({ icon: 'ri-search-2-line', title: '🕵️ Исследователь', desc: '10+ поисков', color: '#ffd700' });
+            if (stats.searches >= 25) achievements.push({ icon: 'ri-compass-line', title: '🧭 Следопыт', desc: '25+ поисков', color: '#00aaff' });
+            if (stats.searches >= 50) achievements.push({ icon: 'ri-radar-line', title: '📡 Мастер поиска', desc: '50+ поисков', color: 'gold' });
+            if (stats.searches >= 100) achievements.push({ icon: 'ri-telescope-line', title: '🔭 Великий искатель', desc: '100+ поисков', color: '#ff00ff' });
+            
+            // Уровень
+            if (levelData.level >= 5) achievements.push({ icon: 'ri-medal-line', title: '🥉 Медаль', desc: 'Уровень 5', color: '#cd7f32' });
+            if (levelData.level >= 10) achievements.push({ icon: 'ri-medal-2-line', title: '🥈 Серебро', desc: 'Уровень 10', color: 'silver' });
+            if (levelData.level >= 20) achievements.push({ icon: 'ri-award-line', title: '🥇 Золото', desc: 'Уровень 20', color: 'gold' });
+            if (levelData.level >= 30) achievements.push({ icon: 'ri-vip-diamond-line', title: '💎 Алмаз', desc: 'Уровень 30', color: '#00aaff' });
+            if (levelData.level >= 50) achievements.push({ icon: 'ri-fire-line', title: '🔥 Огненный', desc: 'Уровень 50', color: '#ff3366' });
+            
+            // Избранное
+            if (favorites.length >= 1) achievements.push({ icon: 'ri-star-line', title: '⭐ Коллекционер', desc: 'Добавлено в избранное', color: 'var(--primary-green)' });
+            if (favorites.length >= 5) achievements.push({ icon: 'ri-bookmark-line', title: '📚 Библиотекарь', desc: '5+ в избранном', color: '#ffd700' });
+            if (favorites.length >= 10) achievements.push({ icon: 'ri-folder-star-line', title: '💫 Архивариус', desc: '10+ в избранном', color: 'gold' });
+            if (favorites.length >= 25) achievements.push({ icon: 'ri-database-line', title: '🗄️ Мега база', desc: '25+ в избранном', color: '#ff00ff' });
+            
+            // Специальные
+            if (levelData.totalXp >= 1000) achievements.push({ icon: 'ri-flashlight-line', title: '⚡ XP Master', desc: '1000+ опыта', color: '#ffed4e' });
+            if (levelData.totalXp >= 5000) achievements.push({ icon: 'ri-thunderstorms-line', title: '⚡ XP Legend', desc: '5000+ опыта', color: '#ff00ff' });
             
             const achievementsEl = document.getElementById('achievements');
             if (achievements.length === 0) {
                 achievementsEl.innerHTML = '<p style="text-align: center; color: var(--light-green); opacity: 0.7; grid-column: 1/-1;">Достижения появятся по мере использования</p>';
             } else {
                 achievementsEl.innerHTML = achievements.map(ach => `
-                    <div class="card" style="text-align: center;">
-                        <i class="${ach.icon}" style="font-size: 50px; color: gold;"></i>
-                        <h3 style="margin: 15px 0 10px;">${ach.title}</h3>
+                    <div class="card" style="text-align: center; border-color: ${ach.color};">
+                        <i class="${ach.icon}" style="font-size: 50px; color: ${ach.color};"></i>
+                        <h3 style="margin: 15px 0 10px; color: ${ach.color};">${ach.title}</h3>
                         <p>${ach.desc}</p>
                     </div>
                 `).join('');
