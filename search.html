@@ -23,8 +23,10 @@
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="search.html">Поиск</a></li>
                 <li><a href="categories.html">Категории</a></li>
-                <li><a href="about.html">О нас</a></li>
+                <li><a href="favorites.html">Избранное</a></li>
                 <li><a href="stats.html">Статистика</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="settings.html">Настройки</a></li>
             </ul>
             <div class="burger">
                 <span></span>
@@ -90,6 +92,40 @@
             </div>
         </section>
 
+        <!-- Быстрые действия -->
+        <section class="card fade-in" style="text-align: center;">
+            <h2 style="margin-bottom: 25px;">
+                <i class="ri-magic-line"></i> Быстрые действия
+            </h2>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <button onclick="feelingLucky()" class="btn" style="background: linear-gradient(90deg, #ffd700, #ffed4e); color: #000;">
+                    <i class="ri-star-smile-line"></i> Мне повезет!
+                </button>
+                <button onclick="showTrending()" class="btn" style="background: linear-gradient(90deg, #ff3366, #ff6b6b); color: #fff;">
+                    <i class="ri-fire-line"></i> Популярное
+                </button>
+                <button onclick="showRecommendations()" class="btn" style="background: linear-gradient(90deg, #aa00ff, #cc00ff); color: #fff;">
+                    <i class="ri-lightbulb-line"></i> Рекомендации
+                </button>
+            </div>
+        </section>
+        
+        <!-- Рекомендации -->
+        <section class="card fade-in" id="recommendations-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 25px;">
+                <i class="ri-sparkling-line"></i> Рекомендации для вас
+            </h2>
+            <div id="recommendations-list" class="cards-grid"></div>
+        </section>
+        
+        <!-- Trending -->
+        <section class="card fade-in" id="trending-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 25px;">
+                <i class="ri-fire-line"></i> Популярное сейчас
+            </h2>
+            <div id="trending-list"></div>
+        </section>
+
         <!-- Подсказки -->
         <section class="card fade-in">
             <h2 style="text-align: center; margin-bottom: 25px;">
@@ -122,8 +158,20 @@
 
     <!-- Скрипты -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="settings.js"></script>
+    <script src="favorites.js"></script>
     <script src="script.js"></script>
     <script>
+        // Проверка параметра запроса в URL
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const queryParam = urlParams.get('q');
+            if (queryParam) {
+                document.getElementById('query').value = queryParam;
+                performSearch();
+            }
+        });
+        
         function performSearch() {
             const query = document.getElementById('query').value;
             startSearch(query);
@@ -171,6 +219,104 @@
                 performSearch();
             }
         });
+        
+        // Мне повезет - случайный брейнрот
+        function feelingLucky() {
+            const categories = ['10M+', '20M+', '30M+', '40M+', '50M+', '100M+'];
+            const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+            const randomWords = ['топ', 'лучший', 'новый', 'мощный', 'крутой', 'эпичный', 'легендарный'];
+            const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
+            const query = `${randomWord} ${randomCategory}`;
+            
+            document.getElementById('query').value = query;
+            performSearch();
+            
+            if (typeof addXP === 'function') {
+                addXP(10, 'Мне повезет!');
+            }
+        }
+        
+        // Показать trending
+        function showTrending() {
+            const trending = getTrending();
+            const section = document.getElementById('trending-section');
+            const list = document.getElementById('trending-list');
+            
+            if (trending.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: var(--light-green); opacity: 0.7;">Пока нет данных о популярных запросах</p>';
+            } else {
+                list.innerHTML = trending.slice(0, 10).map((item, index) => `
+                    <div style="padding: 15px; background: rgba(255, 51, 102, 0.1); border: 1px solid #ff3366; border-radius: 10px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.3s;"
+                         onclick="document.getElementById('query').value='${item.query}'; performSearch();"
+                         onmouseover="this.style.transform='translateX(5px)'; this.style.boxShadow='0 0 20px #ff3366';"
+                         onmouseout="this.style.transform='translateX(0)'; this.style.boxShadow='none';">
+                        <span style="font-size: 1.5em; font-weight: bold; color: #ff3366; min-width: 40px;">#${index + 1}</span>
+                        <span style="flex: 1;"><i class="ri-fire-line"></i> ${item.query}</span>
+                        <span style="color: #ff6b6b;">${item.count} поисков</span>
+                    </div>
+                `).join('');
+            }
+            
+            section.style.display = 'block';
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Показать рекомендации
+        function showRecommendations() {
+            const history = getSearchHistory();
+            const section = document.getElementById('recommendations-section');
+            const list = document.getElementById('recommendations-list');
+            
+            // Генерация рекомендаций на основе истории
+            const recommendations = [];
+            const categories = ['10M+', '20M+', '30M+', '40M+', '50M+', '100M+'];
+            const themes = ['игровой', 'мемный', 'трендовый', 'эпичный', 'новый', 'топовый'];
+            
+            // Если есть история, делаем умные рекомендации
+            if (history.length > 0) {
+                categories.forEach(cat => {
+                    if (!history.includes(cat)) {
+                        const theme = themes[Math.floor(Math.random() * themes.length)];
+                        recommendations.push({
+                            query: `${theme} ${cat}`,
+                            reason: 'На основе ваших интересов',
+                            icon: 'ri-star-line'
+                        });
+                    }
+                });
+            } else {
+                // Базовые рекомендации для новичков
+                recommendations.push(
+                    { query: 'топ 10M+', reason: 'Начните с базового уровня', icon: 'ri-flashlight-line' },
+                    { query: 'мемный 20M+', reason: 'Популярная категория', icon: 'ri-emotion-laugh-line' },
+                    { query: 'эпичный 30M+', reason: 'Для опытных', icon: 'ri-rocket-line' },
+                    { query: 'легендарный 50M+', reason: 'Только для избранных', icon: 'ri-fire-line' }
+                );
+            }
+            
+            list.innerHTML = recommendations.slice(0, 6).map(rec => `
+                <div class="card recommendation-card" onclick="document.getElementById('query').value='${rec.query}'; performSearch();">
+                    <i class="${rec.icon}" style="font-size: 50px; color: var(--secondary-green);"></i>
+                    <h3>${rec.query}</h3>
+                    <p>${rec.reason}</p>
+                    <button class="btn" style="margin-top: 15px; padding: 10px 20px; font-size: 0.9em;">
+                        <i class="ri-search-line"></i> Попробовать
+                    </button>
+                </div>
+            `).join('');
+            
+            section.style.display = 'block';
+            section.scrollIntoView({ behavior: 'smooth' });
+            
+            if (typeof addXP === 'function') {
+                addXP(3, 'Просмотр рекомендаций');
+            }
+        }
+        
+        window.feelingLucky = feelingLucky;
+        window.showTrending = showTrending;
+        window.showRecommendations = showRecommendations;
+        window.getTrending = getTrending;
     </script>
 </body>
 </html>
