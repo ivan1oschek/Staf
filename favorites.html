@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⭐ Избранное - Staf v1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Фоновые частицы -->
+    <div id="particles-js"></div>
+
+    <!-- Навигация -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="ri-brain-line"></i>
+                <span>Staf v1</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="search.html">Поиск</a></li>
+                <li><a href="categories.html">Категории</a></li>
+                <li><a href="favorites.html">Избранное</a></li>
+                <li><a href="stats.html">Статистика</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="settings.html">Настройки</a></li>
+            </ul>
+            <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Заголовок -->
+    <header>
+        <h1>
+            <i class="ri-star-line"></i> Избранное
+        </h1>
+        <p style="font-size: 1.2em; margin-top: 15px;">Ваши любимые брейнроты</p>
+    </header>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <!-- Фильтры и сортировка -->
+        <section class="card fade-in">
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <i class="ri-filter-line"></i>
+                    <h3>Сортировка:</h3>
+                    <select id="sort-favorites" onchange="loadFavorites()" style="padding: 10px; background: var(--bg-black); color: var(--primary-green); border: 1px solid var(--primary-green); border-radius: 5px; font-family: 'Orbitron', sans-serif;">
+                        <option value="date-desc">Новые первые</option>
+                        <option value="date-asc">Старые первые</option>
+                        <option value="rating-desc">По рейтингу ↓</option>
+                        <option value="name-asc">По имени А-Я</option>
+                    </select>
+                </div>
+                <button onclick="clearAllFavorites()" style="padding: 10px 20px;">
+                    <i class="ri-delete-bin-line"></i> Очистить все
+                </button>
+            </div>
+        </section>
+
+        <!-- Статистика избранного -->
+        <div class="stats-container">
+            <div class="stat-item fade-in">
+                <i class="ri-star-line" style="font-size: 50px; color: var(--secondary-green); margin-bottom: 15px;"></i>
+                <div class="stat-number" id="favorites-count">0</div>
+                <div class="stat-label">Избранных</div>
+            </div>
+            <div class="stat-item fade-in">
+                <i class="ri-heart-line" style="font-size: 50px; color: var(--secondary-green); margin-bottom: 15px;"></i>
+                <div class="stat-number" id="total-likes">0</div>
+                <div class="stat-label">Лайков</div>
+            </div>
+            <div class="stat-item fade-in">
+                <i class="ri-file-text-line" style="font-size: 50px; color: var(--secondary-green); margin-bottom: 15px;"></i>
+                <div class="stat-number" id="notes-count">0</div>
+                <div class="stat-label">С заметками</div>
+            </div>
+        </div>
+
+        <!-- Список избранного -->
+        <section class="card fade-in">
+            <h2 style="margin-bottom: 25px;">
+                <i class="ri-list-check"></i> Ваши закладки
+            </h2>
+            <div id="favorites-list"></div>
+        </section>
+
+        <!-- Топ результатов недели -->
+        <section class="card fade-in">
+            <h2 style="text-align: center; margin-bottom: 25px;">
+                <i class="ri-fire-line"></i> Топ недели
+            </h2>
+            <div id="top-results"></div>
+        </section>
+    </div>
+
+    <!-- Футер -->
+    <footer>
+        <p>&copy; 2025 Staf v1 | Сделано с 💚</p>
+    </footer>
+
+    <!-- Модальное окно для заметок -->
+    <div id="note-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeNoteModal()">&times;</span>
+            <h2><i class="ri-edit-line"></i> Редактировать заметку</h2>
+            <textarea id="note-text" placeholder="Введите вашу заметку..." rows="6"></textarea>
+            <button onclick="saveNote()" class="btn" style="margin-top: 15px;">
+                <i class="ri-save-line"></i> Сохранить
+            </button>
+        </div>
+    </div>
+
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="script.js"></script>
+    <script src="favorites.js"></script>
+</body>
+</html>
