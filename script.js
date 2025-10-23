@@ -253,6 +253,11 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
+    // Применение темы
+    if (typeof applyTheme === 'function') {
+        applyTheme();
+    }
+    
     // Увеличение счетчика посещений
     incrementVisitCounter();
     
@@ -264,7 +269,11 @@ window.addEventListener('DOMContentLoaded', () => {
     
     // Инициализация частиц (если библиотека загружена)
     if (typeof particlesJS !== 'undefined') {
-        initParticles();
+        if (typeof initParticlesWithSettings === 'function') {
+            initParticlesWithSettings();
+        } else {
+            initParticles();
+        }
     }
     
     // Плавная прокрутка
@@ -272,6 +281,9 @@ window.addEventListener('DOMContentLoaded', () => {
     
     // Анимация элементов при появлении
     observeElements();
+    
+    // Добавление индикатора уровня в навигацию
+    addLevelBadgeToNav();
 });
 
 // Бургер меню
@@ -361,6 +373,21 @@ function startSearch(query) {
     // Сохраняем в историю
     saveSearchQuery(query);
     
+    // Обновляем trending
+    if (typeof updateTrending === 'function') {
+        updateTrending(query);
+    }
+    
+    // Добавляем XP за поиск
+    if (typeof addXP === 'function') {
+        addXP(5, 'Поиск');
+    }
+    
+    // Обновляем прогресс задания
+    if (typeof updateQuestProgress === 'function') {
+        updateQuestProgress('search', 1);
+    }
+    
     const loading = document.getElementById('loading');
     const result = document.getElementById('result');
     const progress = document.getElementById('progress');
@@ -377,8 +404,37 @@ function startSearch(query) {
             clearInterval(interval);
             if (loading) loading.style.display = 'none';
             if (result) result.style.display = 'block';
+            
+            // Показываем кнопку добавления в избранное
+            showAddToFavoritesButton(query);
         }
     }, 100);
+}
+
+function showAddToFavoritesButton(query) {
+    const resultDiv = document.getElementById('result');
+    if (!resultDiv) return;
+    
+    // Проверяем, есть ли уже кнопка
+    if (resultDiv.querySelector('.add-favorite-btn')) return;
+    
+    const btn = document.createElement('button');
+    btn.className = 'btn add-favorite-btn';
+    btn.style.marginTop = '15px';
+    btn.innerHTML = '<i class="ri-star-line"></i> Добавить в избранное';
+    btn.onclick = () => {
+        if (typeof addToFavorites === 'function') {
+            addToFavorites(query);
+            btn.innerHTML = '<i class="ri-star-fill"></i> В избранном';
+            btn.disabled = true;
+            btn.style.opacity = '0.6';
+        }
+    };
+    
+    const container = resultDiv.querySelector('div');
+    if (container) {
+        container.appendChild(btn);
+    }
 }
 
 // Переход на сервер
@@ -511,6 +567,25 @@ function getStats() {
     };
 }
 
+// Добавление индикатора уровня в навигацию
+function addLevelBadgeToNav() {
+    if (typeof getUserLevel !== 'function') return;
+    
+    const levelData = getUserLevel();
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (navLinks && !document.querySelector('.level-badge')) {
+        const levelBadge = document.createElement('li');
+        levelBadge.innerHTML = `
+            <a href="stats.html" class="level-badge" title="Ваш уровень">
+                <i class="ri-vip-crown-line"></i>
+                LVL ${levelData.level}
+            </a>
+        `;
+        navLinks.appendChild(levelBadge);
+    }
+}
+
 // Экспорт функций для использования в HTML
 window.startSearch = startSearch;
 window.goToServer = goToServer;
@@ -518,3 +593,4 @@ window.getSearchHistory = getSearchHistory;
 window.clearSearchHistory = clearSearchHistory;
 window.getVisitCount = getVisitCount;
 window.getStats = getStats;
+window.quickSearch = quickSearch;
