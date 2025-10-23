@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚙️ Настройки - Staf v1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Фоновые частицы -->
+    <div id="particles-js"></div>
+
+    <!-- Навигация -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="ri-brain-line"></i>
+                <span>Staf v1</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="search.html">Поиск</a></li>
+                <li><a href="categories.html">Категории</a></li>
+                <li><a href="favorites.html">Избранное</a></li>
+                <li><a href="stats.html">Статистика</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="settings.html">Настройки</a></li>
+            </ul>
+            <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Заголовок -->
+    <header>
+        <h1>
+            <i class="ri-settings-3-line"></i> Настройки
+        </h1>
+        <p style="font-size: 1.2em; margin-top: 15px;">Персонализируйте свой опыт</p>
+    </header>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <!-- Уровень пользователя -->
+        <section class="card fade-in" style="text-align: center;" id="user-level-section">
+            <i class="ri-vip-crown-line" style="font-size: 60px; color: gold;"></i>
+            <h2>Ваш уровень: <span id="user-level">1</span></h2>
+            <p style="margin: 15px 0;">Опыт: <span id="user-xp">0</span> / <span id="xp-needed">100</span> XP</p>
+            <div class="progress-bar" style="max-width: 600px; margin: 20px auto;">
+                <div class="progress-fill" id="xp-progress" style="width: 0%"></div>
+            </div>
+        </section>
+
+        <!-- Цветовые темы -->
+        <section class="card fade-in">
+            <h2 style="text-align: center; margin-bottom: 30px;">
+                <i class="ri-palette-line"></i> Цветовая тема
+            </h2>
+            <div class="cards-grid">
+                <div class="theme-card card" onclick="changeTheme('green')" data-theme="green">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #00ff88, #00ffaa);"></div>
+                    <h3>🟢 Зелёная</h3>
+                    <p>По умолчанию</p>
+                </div>
+                <div class="theme-card card" onclick="changeTheme('blue')" data-theme="blue">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #00aaff, #0088ff);"></div>
+                    <h3>🔵 Синяя</h3>
+                    <p>Киберпанк</p>
+                </div>
+                <div class="theme-card card" onclick="changeTheme('purple')" data-theme="purple">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #aa00ff, #cc00ff);"></div>
+                    <h3>🟣 Фиолетовая</h3>
+                    <p>Неоновая</p>
+                </div>
+                <div class="theme-card card" onclick="changeTheme('red')" data-theme="red">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #ff0055, #ff3366);"></div>
+                    <h3>🔴 Красная</h3>
+                    <p>Агрессивная</p>
+                </div>
+                <div class="theme-card card" onclick="changeTheme('gold')" data-theme="gold">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #ffd700, #ffed4e);"></div>
+                    <h3>🟡 Золотая</h3>
+                    <p>Премиум</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Настройки анимаций -->
+        <section class="card fade-in">
+            <h2 style="margin-bottom: 25px;">
+                <i class="ri-movie-line"></i> Настройки анимаций
+            </h2>
+            <div class="setting-item">
+                <div>
+                    <h3>Интенсивность частиц</h3>
+                    <p>Количество анимированных частиц на фоне</p>
+                </div>
+                <select id="particles-intensity" onchange="updateSettings()">
+                    <option value="low">Низкая (50)</option>
+                    <option value="medium" selected>Средняя (80)</option>
+                    <option value="high">Высокая (150)</option>
+                    <option value="ultra">Ультра (250)</option>
+                </select>
+            </div>
+            <div class="setting-item">
+                <div>
+                    <h3>Анимации интерфейса</h3>
+                    <p>Плавные переходы и эффекты</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="ui-animations" checked onchange="updateSettings()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <div>
+                    <h3>Эффект glitch</h3>
+                    <p>Эффект искажения на заголовках</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="glitch-effect" checked onchange="updateSettings()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </section>
+
+        <!-- Управление данными -->
+        <section class="card fade-in">
+            <h2 style="margin-bottom: 25px;">
+                <i class="ri-database-line"></i> Управление данными
+            </h2>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                <button onclick="exportData()" class="btn">
+                    <i class="ri-download-line"></i> Экспорт данных
+                </button>
+                <button onclick="document.getElementById('import-file').click()" class="btn">
+                    <i class="ri-upload-line"></i> Импорт данных
+                </button>
+                <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importData(event)">
+            </div>
+            <p style="text-align: center; margin-top: 20px; color: var(--light-green);">
+                Сохраните свои данные, историю и настройки в файл
+            </p>
+        </section>
+
+        <!-- Ежедневные задания -->
+        <section class="card fade-in">
+            <h2 style="margin-bottom: 25px;">
+                <i class="ri-task-line"></i> Ежедневные задания
+            </h2>
+            <div id="daily-quests"></div>
+        </section>
+
+        <!-- Опасная зона -->
+        <section class="card fade-in" style="border-color: #ff6b6b;">
+            <h2 style="margin-bottom: 25px; color: #ff6b6b;">
+                <i class="ri-error-warning-line"></i> Опасная зона
+            </h2>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                <button onclick="resetAllSettings()" style="background: linear-gradient(90deg, #ff6b6b, #ff8e8e); box-shadow: 0 0 20px #ff6b6b;">
+                    <i class="ri-restart-line"></i> Сбросить настройки
+                </button>
+                <button onclick="resetAllData()" style="background: linear-gradient(90deg, #ff3333, #ff6666); box-shadow: 0 0 20px #ff3333;">
+                    <i class="ri-delete-bin-line"></i> Удалить все данные
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Футер -->
+    <footer>
+        <p>&copy; 2025 Staf v1 | Сделано с 💚</p>
+    </footer>
+
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="script.js"></script>
+    <script src="settings.js"></script>
+</body>
+</html>
